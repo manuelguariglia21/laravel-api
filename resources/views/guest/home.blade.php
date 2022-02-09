@@ -8,12 +8,12 @@
   <title>Boolpress</title>
 </head>
 <body>
-  <h1>Home</h1>
 
-  <div class="app">
-    
+  {{-- qui viene innestato view --}}
+  <div id="app">
+
   </div>
 
-  <script src="{{ asset('js/guest.js') }}" defer></script>
+  <script src="{{ asset('js/guest.js') }}"></script>
 </body>
 </html>
