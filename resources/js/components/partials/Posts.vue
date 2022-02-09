@@ -5,7 +5,12 @@
       <h1>I miei post</h1>
 
       <div class="posts">
-        <PostItem />
+        
+        <PostItem 
+          v-for="post in posts" 
+          :key="post.id"
+          :post = "post"
+          />
       </div>
       
     </div>
@@ -32,7 +37,7 @@ export default {
     getPosts(){
       axios.get(this.apiUrl)
       .then(res => {
-        this.posts = res.data;
+        this.posts = res.data.posts;
         console.log(this.posts);
       })
     }
@@ -41,5 +46,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+  main{
+    .container{
+      .posts{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+      }
+    }
+  }
 </style>
