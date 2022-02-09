@@ -9,5 +9,11 @@
 </head>
 <body>
   <h1>Home</h1>
+
+  <div class="app">
+    
+  </div>
+
+  <script src="{{ asset('js/guest.js') }}" defer></script>
 </body>
 </html>
