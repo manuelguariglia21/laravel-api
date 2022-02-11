@@ -2005,6 +2005,32 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'PostItem',
   props: {
@@ -2048,6 +2074,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   name: 'Posts',
@@ -2056,8 +2104,9 @@ __webpack_require__.r(__webpack_exports__);
   },
   data: function data() {
     return {
-      apiUrl: 'http://127.0.0.1:8000/api/posts',
-      posts: null
+      apiUrl: 'http://127.0.0.1:8000/api/posts?page=',
+      posts: null,
+      pages: {}
     };
   },
   mounted: function mounted() {
@@ -2067,9 +2116,15 @@ __webpack_require__.r(__webpack_exports__);
     getPosts: function getPosts() {
       var _this = this;
 
-      axios.get(this.apiUrl).then(function (res) {
-        _this.posts = res.data.posts;
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
+      this.posts = null;
+      axios.get(this.apiUrl + page).then(function (res) {
+        _this.posts = res.data.posts.data;
         console.log(_this.posts);
+        _this.pages = {
+          current: res.data.posts.current_page,
+          last: res.data.posts.last_page
+        };
       });
     }
   }
@@ -2127,7 +2182,7 @@ exports = module.exports = __webpack_require__(/*! ../../../../node_modules/css-
 
 
 // module
-exports.push([module.i, "article[data-v-49c43f95] {\n  width: 44%;\n  margin: 2%;\n  padding: 15px;\n  border-radius: 10px;\n  background-color: black;\n  border: 2px solid orangered;\n  color: white;\n}\narticle h3[data-v-49c43f95] {\n  margin: 5px 0px;\n}\narticle h3 a[data-v-49c43f95] {\n  text-decoration: none;\n  color: white;\n}\narticle h3 a[data-v-49c43f95]:hover {\n  color: orangered;\n}", ""]);
+exports.push([module.i, "article[data-v-49c43f95] {\n  width: 44%;\n  margin: 2%;\n  padding: 15px;\n  border-radius: 10px;\n  background-color: black;\n  border: 2px solid orangered;\n  color: white;\n}\narticle h3[data-v-49c43f95] {\n  margin: 5px 0px;\n}\narticle h3 a[data-v-49c43f95] {\n  text-decoration: none;\n  color: white;\n}\narticle h3 a[data-v-49c43f95]:hover {\n  color: orangered;\n}\narticle .badges[data-v-49c43f95] {\n  margin: 5px 0;\n}\narticle .badges .category[data-v-49c43f95] {\n  margin-right: 5px;\n  font-size: 12px;\n  background-color: white;\n  color: red;\n  padding: 3px;\n  border-radius: 5px;\n}\narticle .badges .tags[data-v-49c43f95] {\n  font-size: 12px;\n  background-color: transparent;\n  border: 2px solid red;\n  margin-right: 5px;\n  color: white;\n  padding: 3px;\n  border-radius: 5px;\n}\narticle .data[data-v-49c43f95] {\n  margin: 10px 0;\n}", ""]);
 
 // exports
 
@@ -3354,7 +3409,6 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c(
     "div",
-    { staticClass: "div" },
     [_c("Header"), _vm._v(" "), _c("Posts"), _vm._v(" "), _c("Footer")],
     1
   )
@@ -3454,12 +3508,33 @@ var render = function () {
   var _c = _vm._self._c || _h
   return _c("article", [
     _c("h3", [
-      _c("a", { attrs: { href: "#" } }, [_vm._v(_vm._s(_vm.post.title))]),
+      _c("a", { attrs: { href: "#" } }, [
+        _vm._v("\n      " + _vm._s(_vm.post.title) + "\n    "),
+      ]),
     ]),
     _vm._v(" "),
-    _c("p", { staticClass: "data" }, [_vm._v(_vm._s(_vm.post.created_at))]),
+    _c(
+      "div",
+      { staticClass: "badges" },
+      [
+        _c("span", { staticClass: "category" }, [
+          _vm._v("\n      " + _vm._s(_vm.post.category.name) + "\n    "),
+        ]),
+        _vm._v(" \n    \n    /\n\n    "),
+        _vm._l(_vm.post.tags, function (tag) {
+          return _c("span", { key: tag.id, staticClass: "tags" }, [
+            _vm._v("\n      " + _vm._s(tag.name) + "\n    "),
+          ])
+        }),
+      ],
+      2
+    ),
     _vm._v(" "),
-    _c("p", [_vm._v(_vm._s(_vm.truncateText))]),
+    _c("p", { staticClass: "data" }, [
+      _vm._v("\n    " + _vm._s(_vm.post.created_at) + "\n  "),
+    ]),
+    _vm._v(" "),
+    _c("p", [_vm._v("\n    " + _vm._s(_vm.truncateText) + "\n  ")]),
   ])
 }
 var staticRenderFns = []
@@ -3485,18 +3560,69 @@ var render = function () {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("main", [
-    _c("div", { staticClass: "container" }, [
-      _c("h1", [_vm._v("I miei post")]),
-      _vm._v(" "),
-      _c(
-        "div",
-        { staticClass: "posts" },
-        _vm._l(_vm.posts, function (post) {
-          return _c("PostItem", { key: post.id, attrs: { post: post } })
-        }),
-        1
-      ),
-    ]),
+    _vm.posts
+      ? _c(
+          "div",
+          { staticClass: "container" },
+          [
+            _c("h1", [_vm._v("I miei post")]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "posts" },
+              _vm._l(_vm.posts, function (post) {
+                return _c("PostItem", { key: post.id, attrs: { post: post } })
+              }),
+              1
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                attrs: { disabled: _vm.pages.current === 1 },
+                on: {
+                  click: function ($event) {
+                    return _vm.getPosts(_vm.pages.current - 1)
+                  },
+                },
+              },
+              [_vm._v("Prev")]
+            ),
+            _vm._v(" "),
+            _vm._l(_vm.pages.last, function (page) {
+              return _c(
+                "button",
+                {
+                  key: "BUTTON-" + page,
+                  attrs: { disabled: _vm.pages.current === page },
+                  on: {
+                    click: function ($event) {
+                      return _vm.getPosts(page)
+                    },
+                  },
+                },
+                [_vm._v(_vm._s(page))]
+              )
+            }),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                attrs: { disabled: _vm.pages.current === _vm.pages.last },
+                on: {
+                  click: function ($event) {
+                    return _vm.getPosts(_vm.pages.current + 1)
+                  },
+                },
+              },
+              [_vm._v("Next")]
+            ),
+          ],
+          2
+        )
+      : _c("div", { staticClass: "container" }, [
+          _c("h1", [_vm._v("Loading...")]),
+        ]),
   ])
 }
 var staticRenderFns = []
